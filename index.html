@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dengyi Liu</title>
+  <meta name="description" content="Dengyi Liu is a Ph.D. student in Computer Science at Yeshiva University working on flow matching, diffusion models and Schrödinger bridges for missing data, semantic communication and medical AI.">
+  <meta property="og:title" content="Dengyi Liu">
+  <meta property="og:description" content="Ph.D. student in Computer Science, Yeshiva University. Generative models for missing data, semantic communication and medical AI.">
+  <meta property="og:type" content="website">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='9' cy='16' r='6' fill='%232D5B88'/%3E%3Ccircle cx='23' cy='16' r='6' fill='%23A8366A'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,500;1,7..72,400&family=Schibsted+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --paper: #F5F7F9;
+      --ink: #17202A;
+      --muted: #59636F;
+      --rule: #D8DDE3;
+      --source: #2D5B88;
+      --target: #A8366A;
+      --source-rgb: 45, 91, 136;
+      --target-rgb: 168, 54, 106;
+      --sans: "Schibsted Grotesk", "Helvetica Neue", Arial, sans-serif;
+      --serif: "Literata", Georgia, "Times New Roman", serif;
+      --gutter: 10rem;
+      --measure: 42rem;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --paper: #141A21;
+        --ink: #E4E8EC;
+        --muted: #9AA4AF;
+        --rule: #2C3540;
+        --source: #7FAAD6;
+        --target: #E07AA8;
+        --source-rgb: 127, 170, 214;
+        --target-rgb: 224, 122, 168;
+      }
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+    html { -webkit-text-size-adjust: 100%; }
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: var(--serif);
+      font-size: 1.0625rem;
+      line-height: 1.7;
+      font-optical-sizing: auto;
+      -webkit-font-smoothing: antialiased;
+    }
+    p, ul, ol, h1, h2, h3, figure { margin: 0; }
+    ul, ol { padding: 0; list-style: none; }
+
+    a {
+      color: var(--source);
+      text-decoration-line: underline;
+      text-decoration-thickness: 1px;
+      text-underline-offset: 0.2em;
+      text-decoration-color: color-mix(in srgb, var(--source) 40%, transparent);
+    }
+    a:hover { text-decoration-color: currentColor; }
+    a:focus-visible, button:focus-visible {
+      outline: 2px solid var(--source);
+      outline-offset: 3px;
+      border-radius: 2px;
+    }
+
+    .wrap {
+      max-width: 72rem;
+      margin: 0 auto;
+      padding: 0 clamp(1.25rem, 4vw, 3rem);
+    }
+
+    /* Hero */
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+      gap: clamp(2rem, 5vw, 4.5rem);
+      align-items: center;
+      padding-top: clamp(3rem, 9vh, 6.5rem);
+      padding-bottom: clamp(3rem, 8vh, 5.5rem);
+    }
+    .hero h1 {
+      font-family: var(--sans);
+      font-weight: 700;
+      font-size: clamp(2.75rem, 1.8rem + 4.2vw, 4.75rem);
+      line-height: 0.95;
+      letter-spacing: -0.035em;
+    }
+    .role {
+      margin-top: 1.25rem;
+      font-family: var(--sans);
+      font-weight: 500;
+      font-size: 1.0625rem;
+      line-height: 1.45;
+      color: var(--muted);
+    }
+    .bio {
+      margin-top: 1.5rem;
+      max-width: 34rem;
+    }
+    .contact {
+      margin-top: 1.75rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem 1.5rem;
+      font-family: var(--sans);
+      font-weight: 500;
+      font-size: 0.9375rem;
+    }
+
+    .flow { width: 100%; }
+    .flow canvas {
+      display: block;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+    }
+    .flow figcaption {
+      margin-top: 0.75rem;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 0.5rem 1.5rem;
+      font-family: var(--sans);
+      font-size: 0.8125rem;
+      line-height: 1.5;
+      color: var(--muted);
+    }
+    .flow figcaption p { max-width: 26rem; }
+    .toggle {
+      display: inline-flex;
+      border: 1px solid var(--rule);
+      border-radius: 999px;
+      padding: 2px;
+      flex-shrink: 0;
+    }
+    .toggle button {
+      font: inherit;
+      font-weight: 500;
+      color: var(--muted);
+      background: none;
+      border: 0;
+      border-radius: 999px;
+      padding: 0.3rem 0.8rem;
+      cursor: pointer;
+    }
+    .toggle button[aria-pressed="true"] {
+      background: var(--ink);
+      color: var(--paper);
+    }
+
+    /* Sections */
+    main { padding-bottom: 4rem; }
+    .section {
+      display: grid;
+      grid-template-columns: var(--gutter) minmax(0, var(--measure));
+      column-gap: 2.5rem;
+      padding: 2.75rem 0;
+      border-top: 1px solid var(--rule);
+    }
+    .section h2 {
+      font-family: var(--sans);
+      font-weight: 600;
+      font-size: 1.0625rem;
+      line-height: 1.7;
+      letter-spacing: -0.005em;
+    }
+    .section h3 {
+      font-family: var(--sans);
+      font-weight: 600;
+      font-size: 1.0625rem;
+      line-height: 1.4;
+      letter-spacing: -0.005em;
+    }
+
+    .themes { display: grid; gap: 1.5rem; }
+    .themes p { margin-top: 0.3rem; }
+
+    .news li {
+      display: grid;
+      grid-template-columns: 6.75rem minmax(0, 1fr);
+      column-gap: 1rem;
+    }
+    .news li + li { margin-top: 0.6rem; }
+    .news time, .year {
+      font-family: var(--sans);
+      font-weight: 500;
+      font-size: 0.9375rem;
+      line-height: 1.85;
+      color: var(--muted);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .year { margin-bottom: 0.5rem; }
+    .pub-group + .pub-group { margin-top: 2rem; }
+    .pubs li + li { margin-top: 1.35rem; }
+    .pub-title {
+      font-weight: 500;
+      line-height: 1.5;
+    }
+    .pub-meta {
+      margin-top: 0.2rem;
+      font-size: 0.9375rem;
+      line-height: 1.6;
+      color: var(--muted);
+    }
+    .pub-meta strong { color: var(--ink); font-weight: 500; }
+    .pub-links {
+      margin-top: 0.25rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0 1rem;
+      font-family: var(--sans);
+      font-weight: 500;
+      font-size: 0.875rem;
+    }
+
+    .entries li + li { margin-top: 1rem; }
+    .entries .what { font-weight: 500; }
+    .entries .where, .entries .note {
+      font-size: 0.9375rem;
+      color: var(--muted);
+    }
+    .entries .note { margin-top: 0.2rem; }
+    .entries .when {
+      font-family: var(--sans);
+      font-weight: 500;
+      font-size: 0.9375rem;
+      color: var(--muted);
+      font-variant-numeric: tabular-nums;
+    }
+
+    footer {
+      padding: 2rem 0 3rem;
+      border-top: 1px solid var(--rule);
+      font-family: var(--sans);
+      font-size: 0.8125rem;
+      color: var(--muted);
+    }
+
+    @media (max-width: 860px) {
+      .hero { grid-template-columns: minmax(0, 1fr); }
+      .section { grid-template-columns: minmax(0, 1fr); row-gap: 0.75rem; }
+    }
+    @media (max-width: 480px) {
+      body { font-size: 1rem; }
+      .news li { grid-template-columns: minmax(0, 1fr); }
+      .flow figcaption { flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="hero">
+      <div>
+        <h1>Dengyi Liu</h1>
+        <p class="role">Ph.D. student in Computer Science, Yeshiva University<br>Research Scientist Intern, TCL CSOT America</p>
+        <p class="bio">
+          I work on efficient generative AI for computer vision: making diffusion and flow models small and fast enough for places where compute and bandwidth are tight.
+          Recent work rebuilds images from caption, edge and color streams sent over low-power wireless links, and fills in missing clinical trial data with federated flow matching.
+          I'm advised by <a href="https://www.honggangwang.org/">Prof. Honggang Wang</a> and <a href="https://www.umassmed.edu/fanglab/">Prof. Hua Fang</a>.
+        </p>
+        <p class="contact">
+          <a href="mailto:dengyi.liu.math@gmail.com">dengyi.liu.math@gmail.com</a>
+          <a href="https://scholar.google.com/citations?user=vEJjueYAAAAJ&amp;hl=en">Google Scholar</a>
+          <a href="https://www.linkedin.com/in/dengyi-liu-536590241/">LinkedIn</a>
+        </p>
+      </div>
+
+      <figure class="flow">
+        <canvas id="flow" role="img" aria-label="Animation: points sampled from a Gaussian on the left travel to a two-moons dataset on the right."></canvas>
+        <figcaption>
+          <p id="flow-caption">Flow matching carries Gaussian noise (left) onto a two-moons dataset (right) along straight paths.</p>
+          <span class="toggle" role="group" aria-label="Transport method">
+            <button type="button" data-mode="fm" aria-pressed="true">Flow matching</button>
+            <button type="button" data-mode="sb" aria-pressed="false">Schrödinger bridge</button>
+          </span>
+        </figcaption>
+      </figure>
+    </header>
+
+    <main>
+      <section class="section" id="research" aria-labelledby="research-h">
+        <h2 id="research-h">Research</h2>
+        <div class="themes">
+          <div>
+            <h3>Generative image delivery for low-power IoT</h3>
+            <p>Sending an image as separate caption, edge and color streams over low-power wide-area links and rebuilding it with a generative decoder, with each stream protected according to how much the decoder relies on it.</p>
+          </div>
+          <div>
+            <h3>Flow matching for missing health data</h3>
+            <p>Mask-aware and federated flow matching that imputes missing longitudinal trial measurements across sites while patient records stay where they are.</p>
+          </div>
+          <div>
+            <h3>Medical imaging and health</h3>
+            <p>Diffusion-based segmentation of polyp and prostate images, and video language models that score caregiver–child play for occupational therapists.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="news" aria-labelledby="news-h">
+        <h2 id="news-h">News</h2>
+        <ul class="news">
+          <li><time datetime="2026-11-24">Nov 2026</time><span>Presenting HiLight and FedMACFM at IEEE ICPADS 2026 on November 24.</span></li>
+          <li><time datetime="2026-07">Jul 2026</time><span>Semantic-structural image transmission for low-power IoT networks appears at an ICME 2026 workshop.</span></li>
+          <li><time datetime="2026-06">Summer 2026</time><span>Started teaching Effective Coding with AI, a graduate course I designed, as an adjunct instructor at Yeshiva University.</span></li>
+          <li><time datetime="2026-04">Apr 2026</time><span>Joined TCL CSOT America as a research scientist intern.</span></li>
+          <li><time datetime="2026-03">Mar 2026</time><span>Our AI-powered play assessment study is out in <em>Smart Health</em>. <a href="https://www.yu.edu/node/28128">YU News story</a></span></li>
+          <li><time datetime="2026-02">Feb 2026</time><span>Diff-MedSeg is accepted to <em>IEEE Transactions on Multimedia</em>. <a href="https://www.yu.edu/node/28138">YU News story</a></span></li>
+          <li><time datetime="2025-09">Sep 2025</time><span>Impute-MACFM, mask-aware flow matching for imputation, is on <a href="https://arxiv.org/abs/2509.23126">arXiv</a>.</span></li>
+          <li><time datetime="2025-07">Jul 2025</time><span>Presented the Fuzzy Deep Neural Network at IEEE EMBC 2025 in Copenhagen. <a href="https://www.yu.edu/news/katz/ai-model-predicts-weight-gain-pinpoint-accuracy-thanks-fuzzy-thinking">YU News story</a></span></li>
+        </ul>
+      </section>
+
+      <section class="section" id="publications" aria-labelledby="pubs-h">
+        <h2 id="pubs-h">Publications</h2>
+        <div>
+          <div class="pub-group">
+            <p class="year">2026</p>
+            <ul class="pubs">
+              <li>
+                <p class="pub-title">Diff-MedSeg: Diffusion Model based Medical Image Segmentation with Multi-Channel Attention</p>
+                <p class="pub-meta"><strong>Dengyi Liu</strong>, Ming Ma, Hua Fang, Honggang Wang<br><em>IEEE Transactions on Multimedia</em>, 2026</p>
+                <p class="pub-links"><a href="https://www.yu.edu/node/28138">YU News</a></p>
+              </li>
+              <li>
+                <p class="pub-title">HiLight: Objective-Aware Multi-Stream Protection for Generative Image Delivery over Low-Power Wireless Links</p>
+                <p class="pub-meta"><strong>Dengyi Liu</strong>, Ye Liu, Hua Fang, Honggang Wang<br><em>IEEE International Conference on Parallel and Distributed Systems (ICPADS)</em>, 2026</p>
+              </li>
+              <li>
+                <p class="pub-title">FedMACFM: Two-Round Federated Mask-Aware Flow Matching for Longitudinal Trial Data Imputation Across Heterogeneous Cohorts</p>
+                <p class="pub-meta"><strong>Dengyi Liu</strong>, Hua Fang, Honggang Wang<br><em>IEEE International Conference on Parallel and Distributed Systems (ICPADS)</em>, 2026</p>
+              </li>
+              <li>
+                <p class="pub-title">Semantic-Structural Image Transmission for Low-Power Wide-Area Internet of Things Networks</p>
+                <p class="pub-meta"><strong>Dengyi Liu</strong>, Ye Liu, Hua Fang, Honggang Wang<br><em>IEEE International Conference on Multimedia and Expo (ICME) Workshops</em>, 2026</p>
+              </li>
+              <li>
+                <p class="pub-title">AI-Powered Play Assessment Approach Using Video Language Models: A Feasibility Study</p>
+                <p class="pub-meta">Amiya Waldman-Levi, <strong>Dengyi Liu</strong>, Chana Cunin, Vanessa Murad, Honggang Wang<br><em>Smart Health</em>, vol. 39, 2026</p>
+                <p class="pub-links"><a href="https://www.yu.edu/node/28128">YU News</a></p>
+              </li>
+            </ul>
+          </div>
+
+          <div class="pub-group">
+            <p class="year">2025</p>
+            <ul class="pubs">
+              <li>
+                <p class="pub-title">Impute-MACFM: Imputation based on Mask-Aware Flow Matching</p>
+                <p class="pub-meta"><strong>Dengyi Liu</strong>, Honggang Wang, Hua Fang<br>Preprint, arXiv:2509.23126</p>
+                <p class="pub-links"><a href="https://arxiv.org/abs/2509.23126">arXiv</a><a href="https://arxiv.org/pdf/2509.23126">PDF</a></p>
+              </li>
+              <li>
+                <p class="pub-title">Fuzzy Deep Neural Network for Health Information Prediction in Longitudinal Data</p>
+                <p class="pub-meta"><strong>Dengyi Liu</strong>, Honggang Wang, Hua Fang<br><em>47th Annual International Conference of the IEEE Engineering in Medicine and Biology Society (EMBC)</em>, Copenhagen, 2025</p>
+                <p class="pub-links"><a href="https://www.yu.edu/news/katz/ai-model-predicts-weight-gain-pinpoint-accuracy-thanks-fuzzy-thinking">YU News</a></p>
+              </li>
+              <li>
+                <p class="pub-title">PolypSEAG-Net: Enhanced Polyp Segmentation with Attention Gates and Squeeze-and-Excitation</p>
+                <p class="pub-meta"><strong>Dengyi Liu</strong>, Ming Ma, Hua Fang, Honggang Wang<br><em>IEEE/ACM Conference on Connected Health: Applications, Systems and Engineering Technologies (CHASE)</em>, New York, 2025, pp. 25–36</p>
+              </li>
+              <li>
+                <p class="pub-title">A Neural Network Model for Autonomous Vehicles Safety Check Using Camera-only/Camera-Lidar Images</p>
+                <p class="pub-meta"><strong>Dengyi Liu</strong>, Honggang Wang, Hua Fang<br><em>International Conference on Computing, Networking and Communications (ICNC)</em>, 2025</p>
+              </li>
+              <li>
+                <p class="pub-title">Digital Twin in Healthcare and Medical Field: A Review</p>
+                <p class="pub-meta"><strong>Dengyi Liu</strong>, Honggang Wang, X. Xiang, Hua Fang<br>Book chapter in <em>Pattern Recognition and Computer Vision in the New AI Era</em>, World Scientific, 2025, pp. 247–271</p>
+                <p class="pub-links"><a href="https://doi.org/10.1142/9789819807154_0011">DOI</a></p>
+              </li>
+            </ul>
+          </div>
+
+          <div class="pub-group">
+            <p class="year">2024</p>
+            <ul class="pubs">
+              <li>
+                <p class="pub-title">Detecting Anti-Semitic Hate Speech using Transformer-based Large Language Models</p>
+                <p class="pub-meta"><strong>Dengyi Liu</strong>, Minghao Wang, Andrew G. Catlin<br>Preprint, arXiv:2405.03794</p>
+                <p class="pub-links"><a href="https://arxiv.org/abs/2405.03794">arXiv</a><a href="https://arxiv.org/pdf/2405.03794">PDF</a></p>
+              </li>
+            </ul>
+          </div>
+
+          <div class="pub-group">
+            <p class="year">2022</p>
+            <ul class="pubs">
+              <li>
+                <p class="pub-title">Handwritten Letter Recognition Using LetNET</p>
+                <p class="pub-meta"><strong>Dengyi Liu</strong>, A. Wang, Y. Wu<br><em>2nd International Conference on Artificial Intelligence, Automation, and High-Performance Computing (AIAHPC)</em>, Proc. SPIE 12348, 2022</p>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="experience" aria-labelledby="exp-h">
+        <h2 id="exp-h">Experience</h2>
+        <ul class="entries">
+          <li>
+            <p><span class="what">Research Scientist Intern</span>, TCL CSOT America</p>
+            <p class="when">Apr 2026 – present</p>
+          </li>
+          <li>
+            <p><span class="what">Research Assistant</span>, Yeshiva University</p>
+            <p class="when">Oct 2023 – present</p>
+            <p class="note">Diff-MedSeg, HiLight, and FedMACFM (NIH-funded), with Prof. Honggang Wang and Prof. Hua Fang.</p>
+          </li>
+          <li>
+            <p><span class="what">Data Scientist Intern</span>, NWO.ai</p>
+            <p class="when">May 2023 – Aug 2023</p>
+            <p class="note">Shipped a BERT pipeline that scores millions of user comments for customer analytics, with batch and near-real-time inference; improved location forecasting accuracy by 12% over baseline models.</p>
+          </li>
+        </ul>
+      </section>
+
+      <section class="section" id="teaching" aria-labelledby="teach-h">
+        <h2 id="teach-h">Teaching</h2>
+        <ul class="entries">
+          <li>
+            <p><span class="what">Adjunct Instructor, Effective Coding with AI</span>, Yeshiva University</p>
+            <p class="when">Summer and Fall 2026</p>
+            <p class="note">Designed and taught a 10-week graduate course on large language models, retrieval-augmented generation, the Model Context Protocol, and coding with AI agents.</p>
+          </li>
+        </ul>
+      </section>
+
+      <section class="section" id="service" aria-labelledby="service-h">
+        <h2 id="service-h">Service</h2>
+        <ul class="entries">
+          <li><p><span class="what">Reviewer, ICML 2026</span>, Gold Reviewer (top 25%)</p></li>
+          <li><p><span class="what">Reviewer, NeurIPS 2026</span></p></li>
+        </ul>
+      </section>
+
+      <section class="section" id="education" aria-labelledby="edu-h">
+        <h2 id="edu-h">Education</h2>
+        <ul class="entries">
+          <li>
+            <p><span class="what">Ph.D. in Computer Science</span>, Yeshiva University</p>
+            <p class="when">2024 – 2028 (expected)</p>
+          </li>
+          <li>
+            <p><span class="what">M.S. in Data Analytics and Visualization</span>, Yeshiva University</p>
+            <p class="when">2022 – 2024</p>
+          </li>
+          <li>
+            <p><span class="what">B.S. in Information and Computing Science</span>, China University of Mining and Technology (Beijing)</p>
+            <p class="when">2017 – 2021</p>
+          </li>
+        </ul>
+      </section>
+    </main>
+
+    <footer>
+      <p>Last updated November 2026.</p>
+    </footer>
+  </div>
+
+  <script>
+  (() => {
+    const canvas = document.getElementById('flow');
+    const ctx = canvas.getContext('2d');
+    const caption = document.getElementById('flow-caption');
+    const buttons = document.querySelectorAll('.toggle button');
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+    const N = 420;          // particles
+    const K = 72;           // path steps for the bridge
+    const DURATION = 2600;  // ms
+    const captions = {
+      fm: 'Flow matching carries Gaussian noise (left) onto a two-moons dataset (right) along straight paths.',
+      sb: 'A Schrödinger bridge makes the same trip, with Brownian noise along the way that vanishes at both ends.'
+    };
+
+    let W = 0, H = 0, mode = 'fm', pts = [], progress = 0, raf = 0, t0 = 0;
+
+    const randn = () => {
+      let u = 0, v = 0;
+      while (!u) u = Math.random();
+      while (!v) v = Math.random();
+      return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v);
+    };
+
+    const rgbVar = (name) => getComputedStyle(document.documentElement)
+      .getPropertyValue(name).split(',').map(Number);
+
+    // Map unit-space samples to canvas pixels.
+    function layout() {
+      const m = Math.min(0.15 * W, 0.48 * H);
+      const s = Math.min(0.045 * W, 0.15 * H);
+      return {
+        src: ([x, y]) => [0.17 * W + x * s, 0.5 * H + y * s],
+        tgt: ([x, y]) => [0.71 * W + (x - 0.5) * m, 0.5 * H - (y - 0.25) * m],
+        amp: 0.38 * m
+      };
+    }
+
+    function sample() {
+      const src = [], tgt = [];
+      for (let i = 0; i < N; i++) {
+        src.push([randn(), randn()]);
+        const a = Math.random() * Math.PI;
+        const upper = i % 2 === 0;
+        tgt.push([
+          (upper ? Math.cos(a) : 1 - Math.cos(a)) + randn() * 0.06,
+          (upper ? Math.sin(a) : 0.5 - Math.sin(a)) + randn() * 0.06
+        ]);
+      }
+      // A cheap transport plan: pair points by vertical order so paths fan out instead of crossing.
+      src.sort((p, q) => p[1] - q[1]);
+      tgt.sort((p, q) => q[1] - p[1]);
+      pts = src.map((x0, i) => {
+        // Brownian bridge: a random walk pinned to zero at both ends.
+        const walk = [[0, 0]];
+        for (let k = 1; k <= K; k++) {
+          const [px, py] = walk[k - 1];
+          walk.push([px + randn() / Math.sqrt(K), py + randn() / Math.sqrt(K)]);
+        }
+        const [ex, ey] = walk[K];
+        const bridge = walk.map(([x, y], k) => [x - (k / K) * ex, y - (k / K) * ey]);
+        return { x0, x1: tgt[i], bridge };
+      });
+    }
+
+    function resize() {
+      const rect = canvas.getBoundingClientRect();
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      W = rect.width; H = rect.height;
+      canvas.width = Math.round(W * dpr);
+      canvas.height = Math.round(H * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      draw(progress);
+    }
+
+    const ease = (t) => t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+
+    function position(p, L, e) {
+      const a = L.src(p.x0), b = L.tgt(p.x1);
+      if (mode === 'fm') return [a[0] + (b[0] - a[0]) * e, a[1] + (b[1] - a[1]) * e];
+      const f = e * K, k = Math.min(Math.floor(f), K - 1), r = f - k;
+      const pt = (j) => {
+        const t = j / K;
+        return [
+          a[0] + (b[0] - a[0]) * t + p.bridge[j][0] * L.amp,
+          a[1] + (b[1] - a[1]) * t + p.bridge[j][1] * L.amp
+        ];
+      };
+      const P = pt(k), Q = pt(k + 1);
+      return [P[0] + (Q[0] - P[0]) * r, P[1] + (Q[1] - P[1]) * r];
+    }
+
+    function draw(p) {
+      if (!W) return;
+      const L = layout();
+      const S = rgbVar('--source-rgb'), T = rgbVar('--target-rgb');
+      const e = ease(p);
+      ctx.clearRect(0, 0, W, H);
+
+      // Starting cloud, kept faint so the journey stays readable.
+      ctx.fillStyle = 'rgba(' + S + ', 0.28)';
+      ctx.beginPath();
+      for (const q of pts) {
+        const [x, y] = L.src(q.x0);
+        ctx.moveTo(x + 1.3, y);
+        ctx.arc(x, y, 1.3, 0, Math.PI * 2);
+      }
+      ctx.fill();
+
+      // Trails, coloured from source to target across the canvas.
+      const alpha = mode === 'fm' ? 0.22 : 0.13;
+      const grad = ctx.createLinearGradient(0.17 * W, 0, 0.75 * W, 0);
+      grad.addColorStop(0, 'rgba(' + S + ', ' + alpha + ')');
+      grad.addColorStop(1, 'rgba(' + T + ', ' + alpha + ')');
+      ctx.strokeStyle = grad;
+      ctx.lineWidth = 0.7;
+      ctx.beginPath();
+      for (const q of pts) {
+        const a = L.src(q.x0);
+        ctx.moveTo(a[0], a[1]);
+        if (mode === 'fm') {
+          const [x, y] = position(q, L, e);
+          ctx.lineTo(x, y);
+        } else {
+          const steps = Math.floor(e * K);
+          for (let j = 1; j <= steps; j++) {
+            const t = j / K, b = L.tgt(q.x1);
+            ctx.lineTo(a[0] + (b[0] - a[0]) * t + q.bridge[j][0] * L.amp,
+                       a[1] + (b[1] - a[1]) * t + q.bridge[j][1] * L.amp);
+          }
+          const [x, y] = position(q, L, e);
+          ctx.lineTo(x, y);
+        }
+      }
+      ctx.stroke();
+
+      // Moving particles, coloured by time.
+      const c = S.map((v, i) => Math.round(v + (T[i] - v) * e));
+      ctx.fillStyle = 'rgba(' + c + ', 0.95)';
+      ctx.beginPath();
+      for (const q of pts) {
+        const [x, y] = position(q, L, e);
+        ctx.moveTo(x + 1.8, y);
+        ctx.arc(x, y, 1.8, 0, Math.PI * 2);
+      }
+      ctx.fill();
+    }
+
+    function play() {
+      cancelAnimationFrame(raf);
+      sample();
+      if (reduceMotion.matches) { progress = 1; draw(1); return; }
+      progress = 0;
+      draw(0);
+      t0 = 0;
+      const step = (now) => {
+        if (!t0) t0 = now + 350; // brief pause on the starting cloud
+        progress = Math.max(0, Math.min(1, (now - t0) / DURATION));
+        draw(progress);
+        if (progress < 1) raf = requestAnimationFrame(step);
+      };
+      raf = requestAnimationFrame(step);
+    }
+
+    buttons.forEach((btn) => btn.addEventListener('click', () => {
+      mode = btn.dataset.mode;
+      buttons.forEach((b) => b.setAttribute('aria-pressed', String(b === btn)));
+      caption.textContent = captions[mode];
+      play();
+    }));
+
+    new ResizeObserver(resize).observe(canvas);
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => draw(progress));
+    resize();
+    play();
+  })();
+  </script>
+</body>
+</html>
